@@ -37,18 +37,32 @@ public class TreeNode {
 			t.removeAttribute(attribute);
 			
 			// check to see if all true or all false			
-			if(t.table.size() > 0 && t.isSameResult()) {
+			if(t.table.size() <= 0) {
+				System.out.println("Error! Table empty");
+				System.exit(0);
+			}
+			else if (t.isSameResult()) {
 				children.put(option, new Final(t.table.get(0).result));
 			}
-			else if(t.listAttributeNames.size() > 1) {
+			else if(t.listAttributeNames.size() > 0) {
 				TreeNode node = new TreeNode(t.chooseAttribute().get(0), t);
 				children.put(option, node);
 				
 				node.makeChildren();
 			}
 			else {
-				System.out.println("Error!");
-				System.exit(0);
+				double trueCount = 0;
+				double falseCount = 0;
+				for(DataRow r : t.table) {
+					if(r.result) {
+						trueCount ++;
+					}
+					else {
+						falseCount ++;
+					}
+				}
+				
+				TreeNode s = (trueCount >= falseCount) ? children.put(option, new Final(true, trueCount / (trueCount+falseCount))) : children.put(option, new Final(false, falseCount / (trueCount+falseCount)));
 			}
 		}
 	}

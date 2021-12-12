@@ -101,8 +101,9 @@ public class DataTable {
 				c.add(r.attributes.get(attr), r.result);
 			}
 			
-			if(c.weightedEntropy() < minEntr) {
-				minEntr = c.weightedEntropy();
+			double weightedEntropy = c.weightedEntropy();
+			if(weightedEntropy < minEntr) {
+				minEntr = weightedEntropy;
 				minAttr = attr;
 				options = c.countResults.keySet();
 			}

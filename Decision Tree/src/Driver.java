@@ -30,5 +30,6 @@ public class Driver {
 		}
 		
 		DecisionTree tree = new DecisionTree(dataTable);
+		System.out.println();
 	}
 }

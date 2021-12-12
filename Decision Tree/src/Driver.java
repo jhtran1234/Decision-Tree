@@ -8,6 +8,12 @@ import java.util.Scanner;
 import Node.DataRow;
 import Node.DataTable;
 
+/**
+ * Driver of the Decision Tree
+ * Updated 12/12/2021 16:40 EST
+ * @author Jeffrey Tran
+ *
+ */
 public class Driver {
 	public static double entropy(int p, int n) {
 		double p1 = ((double) p)/((double) p + (double) n);

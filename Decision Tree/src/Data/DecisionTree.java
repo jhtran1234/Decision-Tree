@@ -1,6 +1,12 @@
-import Node.DataTable;
+package Data;
+import Data.DataTable;
 import Node.TreeNode;
 
+/**
+ * Class to hold the DecisionTree
+ * @author Jeffrey Tran
+ *
+ */
 public class DecisionTree {
 	public TreeNode root;
 	
@@ -8,6 +14,4 @@ public class DecisionTree {
 		root = new TreeNode(t.chooseAttribute().get(0), t);
 		root.makeChildren();
 	}
-	
-	
 }

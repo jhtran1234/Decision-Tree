@@ -1,3 +1,4 @@
+package Driver;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -5,8 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import Node.DataRow;
-import Node.DataTable;
+import Data.DataRow;
+import Data.DataTable;
+import Data.DecisionTree;
 
 /**
  * Driver of the ID3 Decision Tree

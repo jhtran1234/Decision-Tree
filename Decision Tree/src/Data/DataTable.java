@@ -1,18 +1,30 @@
-package Node;
+package Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class to represent the entire data table, with methods to modify it
+ * @author Jeffrey Tran
+ */
 public class DataTable {
+	
+	/**
+	 * Class to assist in the weighted entropy calculations of the whole attribute
+	 */
 	private class EntropyCountAttr {
+		
+		/**
+		 * Class to calculate the entropy of a specific attribute's option
+		 */
 		private class EntropyCount {
 			private int trueCount = 0;
 			private int falseCount = 0;
 			
-			private void add(boolean b) {
-				if(b) {
+			private void add(boolean result) {
+				if(result) {
 					trueCount++;
 				}
 				else {
@@ -20,15 +32,14 @@ public class DataTable {
 				}
 			}
 			
+			/**
+			 * @return the entropy of a particular branch
+			 */
 			private double entropy() {
 				double p1 = ((double) trueCount)/((double) trueCount + (double) falseCount);
 				double p2 = ((double) falseCount)/((double) trueCount + (double) falseCount);
-				
-				if(p1 == 0.0 || p2 == 0.0) {
-					return 0;
-				}
-				
-				return 0.0 - p1*Math.log(p1)/Math.log(2) - p2*Math.log(p2)/Math.log(2);
+								
+				return (p1 == 0.0 || p2 == 0.0) ? 0.0 : 0.0 - p1*Math.log(p1)/Math.log(2) - p2*Math.log(p2)/Math.log(2);
 			}
 			
 			private int total() {
@@ -39,14 +50,22 @@ public class DataTable {
 		HashMap<String, EntropyCount> countResults = new HashMap<>();
 		double total = 0.0;
 		
-		private void add(String choice, boolean b) {
-			if(!countResults.containsKey(choice)) {
-				countResults.put(choice, new EntropyCount());
+		/**
+		 * Adds an attribute option and its corresponding result to entropy consideration
+		 * @param option
+		 * @param result
+		 */
+		private void add(String option, boolean result) {
+			if(!countResults.containsKey(option)) {
+				countResults.put(option, new EntropyCount());
 			}
-			countResults.get(choice).add(b);
+			countResults.get(option).add(result);
 			total += 1.0;
 		}
 		
+		/**
+		 * @return weighted entropy of a whole attribute (with all of its options weighted)
+		 */
 		private double weightedEntropy() {
 			double hBar = 0.0;
 			for(EntropyCount e : countResults.values()) {
@@ -73,10 +92,21 @@ public class DataTable {
 		this.listAttributeNames = cloneArrayList(listAttributeNames);
 	}
 	
-	public boolean insertRow(DataRow r) {
-		return table.add(r);
+	/**
+	 * Inserts a premade DataRow into the table
+	 * @param row
+	 * @return boolean if successful
+	 */
+	public boolean insertRow(DataRow row) {
+		return table.add(row);
 	}
 	
+	/**
+	 * Inserts a new DataRow into the table
+	 * @param listAttributes
+	 * @param result
+	 * @return boolean if successful
+	 */
 	public boolean insertRow(ArrayList<String> listAttributes, boolean result) {
 		try {
 			return table.add(new DataRow(cloneArrayList(listAttributeNames), listAttributes, result));
@@ -115,6 +145,10 @@ public class DataTable {
 		return output;
 	}
 	
+	/**
+	 * @return boolean to indicate if all elements in the table have the same result
+	 * and thus the Final child node can be added with 1.0 certainty
+	 */
 	public boolean isSameResult() {
 		boolean b = table.get(0).result;
 		
@@ -127,13 +161,21 @@ public class DataTable {
 		return true;
 	}
 	
+	/**
+	 * Removes a specified attribute from consideration in future children
+	 * @param attr for the specified attribute
+	 */
 	public void removeAttribute(String attr) {
 		this.listAttributeNames.remove(attr);
-		for(DataRow r : table) {
+		/*for(DataRow r : table) {
 			r.attributes.remove(attr);
-		}
+		}*/
 	}
 	
+	/**
+	 * @param list
+	 * @return a deep copy of an ArrayList<String>
+	 */
 	public static ArrayList<String> cloneArrayList(ArrayList<String> list){
 		ArrayList<String> out = new ArrayList<>();
 		for(String s : list) {
@@ -142,6 +184,11 @@ public class DataTable {
 		return out;
 	}
 	
+	/**
+	 * @param attr for the attribute to analyze
+	 * @param option for the attribute option to narrow the table down to
+	 * @return deep copy of the DataTable that only includes one @option of said @attr
+	 */
 	public DataTable singleOption(String attr, String option) {
 		ArrayList<DataRow> tableClone = new ArrayList<>();
 		for(DataRow r : table) {
@@ -153,6 +200,9 @@ public class DataTable {
 		return new DataTable(tableClone, cloneArrayList(listAttributeNames));
 	}
 	
+	/**
+	 * @return a deep copy of the DataTable
+	 */
 	public DataTable clone() {
 		ArrayList<DataRow> tableClone = new ArrayList<>();
 		for(DataRow r : table) {

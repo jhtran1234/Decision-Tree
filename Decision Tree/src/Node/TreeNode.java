@@ -46,7 +46,6 @@ public class TreeNode {
 		HashSet<String> options = findOptions();
 
 		// for each option of the attribute, find next best entropy child and build
-		// what happens if the table has no more options?
 		for(String option : options) {
 			DataTable t = table.singleOption(attribute, option);
 			t.removeAttribute(attribute);

@@ -1,0 +1,7 @@
+shape,color,size,result
+circle,red,large,T
+triangle,red,small,F
+square,green,large,F
+triangle,blue,large,F
+circle,blue,large,F
+circle,red,small,T

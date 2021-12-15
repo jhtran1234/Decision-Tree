@@ -25,7 +25,7 @@ public class Driver {
 	
 	public static void main(String[] args) throws Exception {
 		// read in CSV
-		Scanner scan = new Scanner(new BufferedReader(new FileReader("C:\\Users\\jhtra\\Downloads\\table1.csv")));
+		Scanner scan = new Scanner(new BufferedReader(new FileReader("table1.csv")));
 		ArrayList<String> attributeNames = new ArrayList<String>(Arrays.asList(scan.nextLine().split(",")));
 		attributeNames.remove(attributeNames.size() - 1);
 		DataTable dataTable = new DataTable(attributeNames);

@@ -23,8 +23,8 @@ public class DataTable {
 			private int trueCount = 0;
 			private int falseCount = 0;
 			
-			private void add(boolean result) {
-				if(result) {
+			private void add(final boolean result) {
+				if (result) {
 					trueCount++;
 				}
 				else {
@@ -36,10 +36,14 @@ public class DataTable {
 			 * @return the entropy of a particular branch
 			 */
 			private double entropy() {
-				double p1 = ((double) trueCount)/((double) trueCount + (double) falseCount);
-				double p2 = ((double) falseCount)/((double) trueCount + (double) falseCount);
+				final double p1 = ((double) trueCount)/((double) trueCount +
+						(double) falseCount);
+				final double p2 = ((double) falseCount)/((double) trueCount +
+						(double) falseCount);
 								
-				return (p1 == 0.0 || p2 == 0.0) ? 0.0 : 0.0 - p1*Math.log(p1)/Math.log(2) - p2*Math.log(p2)/Math.log(2);
+				return (p1 == 0.0 || p2 == 0.0) ? 0.0 : 0.0 -
+						p1*Math.log(p1)/Math.log(2) -
+						p2*Math.log(p2)/Math.log(2);
 			}
 			
 			private int total() {
@@ -47,7 +51,7 @@ public class DataTable {
 			}
 		}
 
-		HashMap<String, EntropyCount> countResults = new HashMap<>();
+		final HashMap<String, EntropyCount> countResults = new HashMap<>();
 		double total = 0.0;
 		
 		/**
@@ -55,8 +59,8 @@ public class DataTable {
 		 * @param option
 		 * @param result
 		 */
-		private void add(String option, boolean result) {
-			if(!countResults.containsKey(option)) {
+		private void add(final String option, final boolean result) {
+			if (!countResults.containsKey(option)) {
 				countResults.put(option, new EntropyCount());
 			}
 			countResults.get(option).add(result);
@@ -68,9 +72,9 @@ public class DataTable {
 		 */
 		private double weightedEntropy() {
 			double hBar = 0.0;
-			for(EntropyCount e : countResults.values()) {
-				double weight = (((double) e.total())/total);
-				double entropy = e.entropy();
+			for (EntropyCount e : countResults.values()) {
+				final double weight = (((double) e.total())/total);
+				final double entropy = e.entropy();
 				hBar +=  weight * entropy;
 			}
 			
@@ -82,12 +86,13 @@ public class DataTable {
 	public ArrayList<String> listAttributeNames;
 	
 	
-	public DataTable(ArrayList<String> listAttributeNames) {
+	public DataTable(final ArrayList<String> listAttributeNames) {
 		table = new ArrayList<>();
 		this.listAttributeNames = cloneArrayList(listAttributeNames);
 	}
 	
-	public DataTable(ArrayList<DataRow> table, ArrayList<String> listAttributeNames) {
+	public DataTable(final ArrayList<DataRow> table,
+			final ArrayList<String> listAttributeNames) {
 		this.table = table;
 		this.listAttributeNames = cloneArrayList(listAttributeNames);
 	}
@@ -97,7 +102,7 @@ public class DataTable {
 	 * @param row
 	 * @return boolean if successful
 	 */
-	public boolean insertRow(DataRow row) {
+	public boolean insertRow(final DataRow row) {
 		return table.add(row);
 	}
 	
@@ -107,10 +112,12 @@ public class DataTable {
 	 * @param result
 	 * @return boolean if successful
 	 */
-	public boolean insertRow(ArrayList<String> listAttributes, boolean result) {
+	public boolean insertRow(final ArrayList<String> listAttributes,
+			final boolean result) {
 		try {
-			return table.add(new DataRow(cloneArrayList(listAttributeNames), listAttributes, result));
-		} catch (Exception e) {
+			return table.add(new DataRow(cloneArrayList(listAttributeNames),
+					listAttributes, result));
+		} catch (final Exception e) {
 			return false;
 		}
 	}
@@ -124,14 +131,14 @@ public class DataTable {
 		String minAttr = "";
 		Set<String> options = new HashSet<>();
 		
-		for(String attr : listAttributeNames) {
+		for (String attr : listAttributeNames) {
 			EntropyCountAttr c = new EntropyCountAttr();
 			
-			for(DataRow r : table) {
+			for (DataRow r : table) {
 				c.add(r.attributes.get(attr), r.result);
 			}
 			
-			double weightedEntropy = c.weightedEntropy();
+			final double weightedEntropy = c.weightedEntropy();
 			if(weightedEntropy < minEntr) {
 				minEntr = weightedEntropy;
 				minAttr = attr;
@@ -139,7 +146,7 @@ public class DataTable {
 			}
 		}
 		
-		ArrayList<String> output = new ArrayList<String>();
+		final ArrayList<String> output = new ArrayList<String>();
 		output.add(minAttr);
 		output.addAll(options);
 		return output;
@@ -150,7 +157,7 @@ public class DataTable {
 	 * and thus the Final child node can be added with 1.0 certainty
 	 */
 	public boolean isSameResult() {
-		boolean b = table.get(0).result;
+		final boolean b = table.get(0).result;
 		
 		for(DataRow r : table) {
 			if(r.result != b) {
@@ -165,7 +172,7 @@ public class DataTable {
 	 * Removes a specified attribute from consideration in future children
 	 * @param attr for the specified attribute
 	 */
-	public void removeAttribute(String attr) {
+	public void removeAttribute(final String attr) {
 		this.listAttributeNames.remove(attr);
 		/*for(DataRow r : table) {
 			r.attributes.remove(attr);
@@ -176,8 +183,9 @@ public class DataTable {
 	 * @param list
 	 * @return a deep copy of an ArrayList<String>
 	 */
-	public static ArrayList<String> cloneArrayList(ArrayList<String> list){
-		ArrayList<String> out = new ArrayList<>();
+	public static ArrayList<String> cloneArrayList(
+			final ArrayList<String> list){
+		final ArrayList<String> out = new ArrayList<>();
 		for(String s : list) {
 			out.add(s);
 		}
@@ -189,10 +197,10 @@ public class DataTable {
 	 * @param option for the attribute option to narrow the table down to
 	 * @return deep copy of the DataTable that only includes one @option of said @attr
 	 */
-	public DataTable singleOption(String attr, String option) {
-		ArrayList<DataRow> tableClone = new ArrayList<>();
-		for(DataRow r : table) {
-			if(r.attributes.get(attr).equals(option)) {
+	public DataTable singleOption(final String attr, final String option) {
+		final ArrayList<DataRow> tableClone = new ArrayList<>();
+		for (DataRow r : table) {
+			if (r.attributes.get(attr).equals(option)) {
 				tableClone.add(r.clone());
 			}
 		}
@@ -204,7 +212,7 @@ public class DataTable {
 	 * @return a deep copy of the DataTable
 	 */
 	public DataTable clone() {
-		ArrayList<DataRow> tableClone = new ArrayList<>();
+		final ArrayList<DataRow> tableClone = new ArrayList<>();
 		for(DataRow r : table) {
 			tableClone.add(r.clone());
 		}
